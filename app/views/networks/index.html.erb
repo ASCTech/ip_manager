@@ -1,0 +1,4 @@
+<script type='text/javascript'>
+</script>
+<%= form_tag("/networks", :method => 'get') %>
+<%= collection_select('network','network_id',Network.all,:id,:network) %>

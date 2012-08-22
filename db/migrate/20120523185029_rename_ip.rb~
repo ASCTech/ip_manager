@@ -1,0 +1,9 @@
+class RenameIp < ActiveRecord::Migration
+  def up
+    rename table :ip, :device
+  end
+
+  def down
+    rename table :device, :ip
+  end
+end

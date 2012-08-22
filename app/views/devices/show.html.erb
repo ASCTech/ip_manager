@@ -1,0 +1,5 @@
+<% @device.attributes.keys do |attribute| %>
+    <%= attribute %>
+<% end %>
+
+<%= link_to "Edit", edit_device_path(@device) %>

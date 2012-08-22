@@ -1,0 +1,20 @@
+class Ip < ActiveRecord::Base
+    require 'ipaddr'
+    
+    belongs_to :network
+    attr_accessible :description, :ip
+    
+    
+    def ip
+        return IPAddr.new(ip,Socket::AF_INET).to_s
+    end
+    
+    def as_json(options={})
+        result = super()
+        result[:ip] = self.to_s
+    end
+    
+    def serializable_hash
+        
+    end
+end

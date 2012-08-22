@@ -1,0 +1,22 @@
+<p>Network: <%= link_to "#{@network.network}/#{@network.cidr_mask}", network_path(@network) %></p>
+<p>Mask: <%= @network.mask %></p>
+IP Addresses:
+<table>
+<tr>
+    <th>IP</th>
+    <th>Description</th>
+    <th>Type</th>
+    <th>Last Updated</th>
+    <th>Edit</th>
+</tr>
+<% @network.devices.all.each do |device| %>
+    <tr>
+        <td><%= device.ip %></td>
+        <td><%= device.description %></td>
+        <td><%= device.type.name %></td>
+        <td><%= device.updated_at %></td>
+        <td><%= link_to "Edit", edit_device_path(device) %></td>
+    </tr>
+<% end %>
+</table>
+

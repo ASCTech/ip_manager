@@ -1,0 +1,19 @@
+class IpsController < ApplicationController
+    def index
+        @ips = Ip.all
+    end
+    
+    def show
+        @ip = Ip.find(params[:id])
+        
+        respond_to do |format|
+            format.html
+            format.json {render :json => @ip.to_s}
+            format.xml {render :xml => @ip.to_s}
+        end
+    end
+    
+    def new
+        
+    end
+end

@@ -1,0 +1,5 @@
+<p>Editing <%= @device.ip %></p>
+<%= form_for(@device) do |d| %>
+    <p><%= d.text_field :description %></p>
+    <p><%= d.submit "Edit" %></p>
+<% end %>

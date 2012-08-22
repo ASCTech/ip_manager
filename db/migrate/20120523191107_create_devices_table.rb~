@@ -1,0 +1,13 @@
+class CreateDevicesTable < ActiveRecord::Migration
+    def up
+        create_table :devices do |t|
+            t.integer :ip, :limit=>8
+            t.text :description
+            t.int references :network
+            t.timestamps
+        end
+    end
+
+    def down
+    end
+end
