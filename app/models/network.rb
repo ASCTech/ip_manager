@@ -13,6 +13,6 @@ class Network < ActiveRecord::Base
     end
     
     def cidr_mask
-        Integer(32-Math.log2((IPAddr.new(mask,Socket::AF_INET).to_i^0xffffffff)+1))
+        32-Integer(Math.log2((IPAddr.new(mask,Socket::AF_INET).to_i^0xffffffff)+1))
     end
 end
