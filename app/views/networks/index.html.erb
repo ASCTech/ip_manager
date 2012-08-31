@@ -1,4 +1,9 @@
 <script type='text/javascript'>
+  $(document).ready(function(){
+    $("#network_id").change(function(evt){
+      window.location.href = "/networks/"+this.value;
+    });
+  });
 </script>
 <%= form_tag("/networks", :method => 'get') %>
-<%= collection_select('network','network_id',Network.all,:id,:network) %>
+<%= collection_select('network','id',Network.all,:id,:network) %>

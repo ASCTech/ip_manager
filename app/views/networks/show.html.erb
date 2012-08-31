@@ -1,6 +1,30 @@
-<p>Network: <%= link_to "#{@network.network}/#{@network.cidr_mask}", network_path(@network) %></p>
-<p>Mask: <%= @network.mask %></p>
-IP Addresses:
+<script type='text/javascript'>
+  $(document).ready(function(){
+    $("#network_id").change(function(evt){
+      window.location.href = "/networks/"+this.value;
+    });
+  });
+</script>
+<div>
+<%= form_tag("/networks", :method => 'get') %>
+Subnet: <%= collection_select('network','id',Network.all, :id, :cidr_and_description) %>
+Building: <%= collection_select('building','id',Building.all,:id,:name) %>
+Network:
+</div>
+
+
+<div id="network_info_area">
+    <ul>
+        <li><b>Subnet: </b><%= @network.cidr_full %></li>
+        <li><b>Mask: </b><%= @network.mask %></li>
+        <li><b>Gateway: </b><%= @network.gateway %></li>
+        <li><b>DHCP: </b><%= 'Unknown' %></li>
+        <li><b>VLAN: </b><%= 'Unknown' %></li>
+        <li><b>Building: </b><%= @network.buildings.pluck(:name).join(', ') %></li>
+    </ul>
+    <%= link_to("Edit", edit_network_url(@network.id)) %>
+</div>
+<br />
 <table>
 <tr>
     <th>IP</th>
@@ -19,4 +43,3 @@ IP Addresses:
     </tr>
 <% end %>
 </table>
-

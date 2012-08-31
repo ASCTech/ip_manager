@@ -11,7 +11,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120601181159) do
+ActiveRecord::Schema.define(:version => 20120829201829) do
+
+  create_table "activities", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "Action"
+  end
+
+  create_table "buildings", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "name"
+    t.string   "code"
+    t.integer  "osuid"
+  end
+
+  create_table "buildings_networks", :force => true do |t|
+    t.integer "building_id"
+    t.integer "network_id"
+  end
+
+  add_index "buildings_networks", ["building_id", "network_id"], :name => "index_buildings_networks_on_building_id_and_network_id", :unique => true
+  add_index "buildings_networks", ["network_id"], :name => "index_buildings_networks_on_network_id"
 
   create_table "devices", :force => true do |t|
     t.integer  "network_id"
@@ -23,14 +45,23 @@ ActiveRecord::Schema.define(:version => 20120601181159) do
   end
 
   create_table "networks", :force => true do |t|
-    t.integer  "network",    :limit => 8
-    t.integer  "mask",       :limit => 8
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
+    t.integer  "network",     :limit => 8
+    t.integer  "mask",        :limit => 8
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+    t.string   "description"
+    t.integer  "gateway",     :limit => 8
   end
 
   create_table "types", :force => true do |t|
     t.text "name"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "network_id"
   end
 
 end

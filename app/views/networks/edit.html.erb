@@ -1,0 +1,7 @@
+<p>Editing <%= @network.cidr_full %></p>
+
+<%= form_for @network do |n| %>
+  <p>Gateway: <%= n.text_field :gateway, :value => n.object.gateway %></p>
+  <p>Buildings: <%= collection_select(:network, :buildings, Building.all, :id, :name, {:selected => @network.buildings.pluck(:building_id)}, :multiple => true) %></p>
+  <p></p>
+<% end %>

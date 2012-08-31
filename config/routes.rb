@@ -1,7 +1,8 @@
 Ipmanager::Application.routes.draw do
     resources :networks
     resources :devices
-    root :to => "Networks#index"
+    root :to => "Networks#show", :id => 1
+    match ':options' => 'static#options'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

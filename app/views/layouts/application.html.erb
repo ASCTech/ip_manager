@@ -9,8 +9,8 @@
 <body class='container'>
 <nav>
   <ul>
-  <li><%= link_to("Home", networks_url) %></li>
-  <li>Network Mgmt</li>
+  <li><%= link_to("Home", networks_url+"/"+Network.first.id.to_s) %></li>
+  <li><%= link_to("Options", '/options/') %></li>
   <li>Admin</li>
   <li>Logout</li>
   </ul>
