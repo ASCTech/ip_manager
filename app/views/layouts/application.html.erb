@@ -11,8 +11,16 @@
   <ul>
   <li><%= link_to("Home", networks_url+"/"+Network.first.id.to_s) %></li>
   <li><%= link_to("Options", '/options/') %></li>
-  <li>Admin</li>
-  <li>Logout</li>
+  <li><%= link_to("Admin", '/admin/') %></li>
+  <li>
+    <%=
+    if Rails.env.production? || Rails.env.staging?
+      link_to 'Logout', logout_path
+    else
+      link_to 'Logout', user_session_path, :method => :destroy
+    end
+    %>
+  </li>
   </ul>
 </nav>
 <br>

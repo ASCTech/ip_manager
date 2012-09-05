@@ -2,7 +2,10 @@ Ipmanager::Application.routes.draw do
     resources :networks
     resources :devices
     root :to => "Networks#show", :id => 1
-    match ':options' => 'static#options'
+    
+    ['options','admin','logout'].each do |page|
+        get page => "static##{page}"
+    end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
-  attr_accessible :login
-  attr_accessible :network_id
+  authenticated_by_shibboleth
+  
+  attr_accessible :login, :network_id, :emplid, :name_n
   
   belongs_to :network
+  
 end

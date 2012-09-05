@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120829201829) do
+ActiveRecord::Schema.define(:version => 20120905184240) do
 
   create_table "activities", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20120829201829) do
     t.integer  "osuid"
   end
 
-  create_table "buildings_networks", :force => true do |t|
+  create_table "buildings_networks", :id => false, :force => true do |t|
     t.integer "building_id"
     t.integer "network_id"
   end
@@ -44,13 +44,21 @@ ActiveRecord::Schema.define(:version => 20120829201829) do
     t.integer  "type_id"
   end
 
+  create_table "dhcp_servers", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "networks", :force => true do |t|
-    t.integer  "network",     :limit => 8
-    t.integer  "mask",        :limit => 8
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.integer  "network",        :limit => 8
+    t.integer  "mask",           :limit => 8
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.string   "description"
-    t.integer  "gateway",     :limit => 8
+    t.integer  "gateway",        :limit => 8
+    t.integer  "dhcp_server_id"
+    t.integer  "vlan"
   end
 
   create_table "types", :force => true do |t|
@@ -62,6 +70,8 @@ ActiveRecord::Schema.define(:version => 20120829201829) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "network_id"
+    t.string   "emplid"
+    t.string   "name_n"
   end
 
 end

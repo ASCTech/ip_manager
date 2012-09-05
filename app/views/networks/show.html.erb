@@ -18,8 +18,8 @@ Network:
         <li><b>Subnet: </b><%= @network.cidr_full %></li>
         <li><b>Mask: </b><%= @network.mask %></li>
         <li><b>Gateway: </b><%= @network.gateway %></li>
-        <li><b>DHCP: </b><%= 'Unknown' %></li>
-        <li><b>VLAN: </b><%= 'Unknown' %></li>
+        <li><b>DHCP: </b><%= @network.dhcp_server.nil? ? 'Unknown' : @network.dhcp_server.name %></li>
+        <li><b>VLAN: </b><%= @network.vlan.nil? ? 'Unknown' : @network.vlan.to_s %></li>
         <li><b>Building: </b><%= @network.buildings.pluck(:name).join(', ') %></li>
     </ul>
     <%= link_to("Edit", edit_network_url(@network.id)) %>
@@ -37,7 +37,7 @@ Network:
     <tr>
         <td><%= device.ip %></td>
         <td><%= device.description %></td>
-        <td><%= device.type.name %></td>
+        <td><%= device.type.nil? ? "" : device.type.name %></td>
         <td><%= device.updated_at.strftime("%Y/%m/%d") %></td>
         <td><%= link_to "Edit", edit_device_path(device) %></td>
     </tr>

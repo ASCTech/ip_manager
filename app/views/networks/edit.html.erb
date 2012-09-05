@@ -1,7 +1,15 @@
 <p>Editing <%= @network.cidr_full %></p>
 
 <%= form_for @network do |n| %>
-  <p>Gateway: <%= n.text_field :gateway, :value => n.object.gateway %></p>
-  <p>Buildings: <%= collection_select(:network, :buildings, Building.all, :id, :name, {:selected => @network.buildings.pluck(:building_id)}, :multiple => true) %></p>
-  <p></p>
+  Description: <%= n.text_field :description %>
+  <br>
+  Gateway: <%= n.text_field :gateway, :value => n.object.gateway %>
+  <br>
+  DHCP Server: <%= collection_select(:network, :dhcp_server_id, DhcpServer.all, :id, :name) %>
+  <br>
+  VLAN: <%= n.text_field :vlan %>
+  <br>
+  Buildings: <%= collection_select(:network, :building_ids, Building.all, :id, :name, {:selected => @network.buildings.pluck(:building_id)}, :multiple => true) %>
+  <br>
+  <%= submit_tag "Save" %> <%= link_to "Delete", network_path(@network), :method => :delete %>
 <% end %>
