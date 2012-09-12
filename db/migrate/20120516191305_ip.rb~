@@ -1,5 +1,0 @@
-class AddNetworkToIp < ActiveRecord::Migration
-  def change
-    
-  end
-end

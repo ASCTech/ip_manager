@@ -13,3 +13,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore gedit backup files
+*~
+
+# Ignore database ymls
+/config/database.yml

@@ -1,7 +1,0 @@
-<script type='text/javascript'>
-    $("#network_network_id").click(function(){
-        
-    });
-</script>
-<%= form_tag("/networks", :method => 'get') %>
-<%= collection_select('network','network_id',Network.all,:id,:network) %>
