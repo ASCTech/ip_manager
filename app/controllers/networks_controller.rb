@@ -9,7 +9,8 @@ class NetworksController < ApplicationController
         book = Spreadsheet::Workbook.new
         Network.all.each do |n|
           sheet = book.create_worksheet
-          ToXls::Writer.new(n.devices, :name => n.cidr_and_description).write_sheet(sheet)
+          sheet.name = n.cidr_and_description
+          ToXls::Writer.new(n.devices, :columns => [:ip, :description, :type => [:name]], :headers => %w{IP Description Type}).write_sheet(sheet)
         end
         data = StringIO.new
         book.write(data)
