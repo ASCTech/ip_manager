@@ -1,9 +1,14 @@
 class StaticController < ApplicationController
-  def options
+  
+  def home
+    redirect_to current_user.network_id.nil? ? Network.first : Network.find(current_user.network_id)
+  end
+    
+  def admin
     
   end
   
-  def admin
+  def export
     
   end
   

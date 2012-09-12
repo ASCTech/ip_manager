@@ -14,9 +14,10 @@
 ActiveRecord::Schema.define(:version => 20120905184240) do
 
   create_table "activities", :force => true do |t|
+    t.string   "activity"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "Action"
   end
 
   create_table "buildings", :force => true do |t|

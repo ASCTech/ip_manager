@@ -1,0 +1,6 @@
+Editing <%= current_user.name_n %>
+
+<%= form_for(current_user) do |f| %>
+  Default network: <%= collection_select(:user, :network_id, Network.all, :id, :cidr_and_description, :selected => current_user.network_id) %>
+  <%= f.submit "Save" %>
+<% end %>

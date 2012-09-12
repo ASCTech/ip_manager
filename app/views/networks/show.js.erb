@@ -1,0 +1,1 @@
+$("#network_id").html("<%= j(collection_select(:network,:id,@networks,:id,:cidr_and_description, :selected => @network.id)) %>");

@@ -11,5 +11,5 @@
   <br>
   Buildings: <%= collection_select(:network, :building_ids, Building.all, :id, :name, {:selected => @network.buildings.pluck(:building_id)}, :multiple => true) %>
   <br>
-  <%= submit_tag "Save" %> <%= link_to "Delete", network_path(@network), :method => :delete %>
+  <%= submit_tag "Save" %> <%= link_to "Delete", network_path(@network), :confirm => "Are you sure?", :method => :delete %>
 <% end %>

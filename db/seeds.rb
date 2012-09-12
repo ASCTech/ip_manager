@@ -42,3 +42,7 @@ end
 
 
 User.find_or_create_by_emplid(:name_n => 'wisniewski.58', :emplid => '200131317')
+User.find_or_create_by_emplid(:name_n => 'smith.1', :emplid => '12131415')
+
+Activity.find_or_create_by_user_id_and_activity(:user_id => 1, :activity => "Created IP manager")
+Activity.find_or_create_by_user_id_and_activity(:user_id => 2, :activity => "Found bug")

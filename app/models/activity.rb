@@ -1,3 +1,4 @@
 class Activity < ActiveRecord::Base
-  # attr_accessible :title, :body
+  default_scope :order => 'updated_at DESC'
+  attr_accessible :activity, :user_id
 end

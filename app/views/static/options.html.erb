@@ -1,0 +1,5 @@
+<%= "Settings for " + current_user.name_n %>
+<%= form_for(:user) do |f| %>
+  Default network: <%= collection_select('network','id',Network.all,:id,:description,{},:selected => current_user.network_id) %><br>
+  <%= f.submit "Update" %>
+<% end %>

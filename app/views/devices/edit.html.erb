@@ -1,6 +1,6 @@
 <p>Editing <%= @device.ip %></p>
 <%= form_for(@device) do |d| %>
     <p><%= d.text_field :description %></p>
-    <p><%= d.select(:type_id, options_from_collection_for_select(@type_options, :id, :name)) %></p>
+    <p><%= d.select(:type_id, options_from_collection_for_select(@type_options, :id, :name, @device.type_id), {:include_blank => true}) %></p>
     <p><%= d.submit "Submit" %></p>
 <% end %>

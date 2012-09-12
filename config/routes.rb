@@ -1,11 +1,14 @@
 Ipmanager::Application.routes.draw do
     resources :networks
     resources :devices
-    root :to => "Networks#show", :id => 1
+    resources :users
+    resources :activities
+    root :to => "Static#home"
     
-    ['options','admin','logout'].each do |page|
+    %w(admin export logout).each do |page|
         get page => "static##{page}"
     end
+    
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -1,0 +1,14 @@
+<table>
+  <tr>
+    <th>User</th>
+    <th>Description</th>
+    <th>Time</th>
+  </tr>
+<% Activity.all.each do |a| %>
+  <tr>
+    <td><%= User.find(a.user_id).name_n %></td>
+    <td><%= a.activity %></td>
+    <td><%= a.updated_at %></td>
+  </tr>
+<% end %>
+</table>
