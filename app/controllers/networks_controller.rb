@@ -11,9 +11,9 @@ class NetworksController < ApplicationController
           sheet = book.create_worksheet
           ToXls::Writer.new(n.devices, :name => n.cidr_and_description).write_sheet(sheet)
         end
-        io = StringIO.new
-        
-        send_data book.write("export.xls")
+        data = StringIO.new
+        book.write(data)
+        send_data data.string, :type => 'application/excel', :disposition => 'attachment', :filename => 'networks.xls'
       end
     end
   end
