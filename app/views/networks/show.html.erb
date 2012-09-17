@@ -1,17 +1,17 @@
 <script type='text/javascript'>
   $(document).ready(function(){
-    $("#network_id,#building_id").on('change',function(evt){
-      document.location.href = "/networks/"+$("#network_id").val()+"?building_id="+$("#building_id").val();
+    $("#network_filter_form > form > select").on('change',function(evt){
+      document.location.href = "/networks/"+$("#network_id").val()+(this.id == 'network_id' ? "" : "?"+this.id+"="+this.value);
     });
   });
 </script>
-<div>
-<%= form_tag("/networks", :method => 'get') %>
+<div id='network_filter_form'>
+<%= form_tag("/networks", :method => 'get') do -%>
 Subnet: <%= collection_select(:network, :id, @networks, :id, :cidr_and_description) %>
 Building: <%= collection_select(:building, :id, Building.all, :id, :name, {:prompt=>"All Buildings", :selected => @building_id}) %>
-Network:
+Network: <%= select_tag("network_class_b",options_for_select(Network.uniq_class_b), {:prompt=>"All Class B's", :selected => @class_b}) %>
+<% end -%>
 </div>
-
 
 <div id="network_info_area">
     <ul>

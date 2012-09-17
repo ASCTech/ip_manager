@@ -20,15 +20,19 @@ class NetworksController < ApplicationController
   end
   
   def show
-    begin
+    if params.has_key?(:building_id) && !params[:building_id].nil?
       @networks = Building.find(params[:building_id]).networks
       @network = @networks.first
       @building_id = params[:building_id]
-    rescue
+    elsif params.has_key?(:network_class_b) && !params[:network_class_b].nil?
+      @networks = Network.find_by_class_b(params[:network_class_b])
+      @network = @networks.first
+      @class_b = params[:network_class_b]
+    else
       @networks = Network.all
       @network = Network.find(params[:id])
-      @building_id = ""
     end
+    
     respond_to do |format|
       format.js do
       end
@@ -50,6 +54,12 @@ class NetworksController < ApplicationController
     params[:network][:gateway] = IPAddr.new(params[:network][:gateway],Socket::AF_INET).to_i
     
     if @network.update_attributes(params[:network])
+      #build update string for activity log
+      Activity.create(:activity => "Updated Network #{@network.cidr_full},
+        Description: #{@network.description},
+        Buildings: #{@network.buildings.pluck(:name).join(', ')}",
+        :user_id => User.find_by_name_n(current_user.name_n))
+      
       redirect_to :action => 'show', :id => @network
     else
       redirect_to :action => 'edit', :id => @network
@@ -59,7 +69,6 @@ class NetworksController < ApplicationController
   def destroy
     @network = Network.find(params[:id])
     @network.buildings.destroy_all
-    @network.devices.destroy_all
     @network.destroy
     
     redirect_to :action => 'show', :id => Network.first

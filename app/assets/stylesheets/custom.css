@@ -35,6 +35,12 @@ nav ul li a {
     border-radius:10px;
 }
 
+#network_info_area {
+    -moz-border-radius:5px;
+    -webkit-border-radius: 5px;
+    background-color:#F0F0F0;
+}
+
 #network_info_area ul {
     margin: 0;
     padding: 0;
