@@ -59,6 +59,11 @@ class Network < ActiveRecord::Base
   
   #gets all networks that match the provided class b address
   def self.find_by_class_b(address)
+    #handle empty address
+    if address.nil? || address.empty?
+      return Network.all
+    end
+      
     address_i = IPAddr.new(address,Socket::AF_INET).to_i
     network_ids = Array.new
     ActiveRecord::Base.connection.select_all("select id from networks where (#{address_i} & 0xffff0000) = (network & 0xffff0000)").each do |n|
