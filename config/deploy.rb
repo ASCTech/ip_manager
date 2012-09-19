@@ -4,7 +4,7 @@ require 'rvm/capistrano'
 set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//,"")
 
 set :application, "ipmanager"
-set :repository,  "git@github.com:ASCTech/ipmanager.git"
+set :repository,  "git@github.com:ASCTech/ip_manager.git"
 
 set :keep_releases, 3
 
