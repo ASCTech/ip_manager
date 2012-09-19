@@ -24,6 +24,8 @@ gem 'jquery-rails'
 gem 'shibboleth-rails'
 gem 'cancan'
 gem 'to_xls'
+gem 'capistrano'
+gem 'rvm-capistrano'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
