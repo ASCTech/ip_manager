@@ -1,6 +1,9 @@
 require 'bundler/capistrano'
 require 'rvm/capistrano'
 
+load 'deploy'
+load 'deploy/assets'
+
 set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//,"")
 
 set :application, "ipmanager"
@@ -47,7 +50,20 @@ namespace :deploy do
   end
 end
 
-after "deploy:create_symlink" do
+namespace :deploy do
+  namespace :assets do
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      from = source.next_revision(current_revision)
+      if capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
+        run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
+      else
+        logger.info "Skipping asset pre-compilation because there were no asset changes"
+      end
+    end
+  end
+end
+
+before "deploy:assets:precompile" do
   run [
     "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml",
     "ln -fs #{shared_path}/uploads #{release_path}/uploads",
