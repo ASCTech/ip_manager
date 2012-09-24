@@ -43,9 +43,27 @@ class Network < ActiveRecord::Base
     end
   end
   
-  #will begin when given axfr permissions
-  def hostnames
+  def updatehostnames
     
+    #build the dns strings for grepping
+    reverse = IPAddr.new(self.network).reverse
+    #remove the first 2 octets
+    reverse_a = reverse.split(/\./)
+    reverse_a.shift(2)
+    reverse = reverse_a.join '.'
+    
+    dig = `dig axfr asc.ohio-state.edu #{reverse}`
+    if dig.match(/failed/i).nil?
+      #parse dig output and update device hostnames
+      dig.split(/\n/).each do |line|
+        matchdata = /(?<reverseip>[\d\.]+)\.in\-addr\.arpa\.\s+\d+\s+IN\s+PTR\s+(?<fqdn>[\w\-\.]+)\./.match(line)
+        ip = IPAddr.new(matchdata[:reverseip].split(/\./).reverse.join('.'),Socket::AF_INET).to_i
+        Device.find_by_ip(ip).update_attribute(:hostname, matchdata[:fqdn])
+      end
+    else
+      puts "Zone transfer failed"
+    end
+  
   end
   
   #gets array of network addresses that are unique by the first 2 octets

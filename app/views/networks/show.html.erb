@@ -28,6 +28,7 @@ Network: <%= select_tag("network_class_b", options_for_select(Network.uniq_class
 <table>
 <tr>
     <th>IP</th>
+    <th>Hostname</th>
     <th>Description</th>
     <th>Type</th>
     <th>Last Updated</th>
@@ -36,6 +37,7 @@ Network: <%= select_tag("network_class_b", options_for_select(Network.uniq_class
 <% @network.devices.all.each do |device| %>
     <tr>
         <td><%= device.ip %></td>
+        <td><%= device.hostname %></td>
         <td><%= device.description %></td>
         <td><%= device.type.nil? ? "" : device.type.name %></td>
         <td><%= device.updated_at.strftime("%Y/%m/%d") %></td>

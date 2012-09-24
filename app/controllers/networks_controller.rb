@@ -20,18 +20,24 @@ class NetworksController < ApplicationController
   end
   
   def show
-    if params.has_key?(:building_id) && !params[:building_id].empty?
-      @networks = Building.find(params[:building_id]).networks
-      @network = @networks.first
-      @building_id = params[:building_id]
-    elsif params.has_key?(:network_class_b) && !params[:network_class_b].empty?
-      @networks = Network.find_by_class_b(params[:network_class_b])
-      @network = @networks.first
-      @class_b = params[:network_class_b]
-    else
+    begin
+      if params.has_key?(:building_id) && !params[:building_id].empty?
+        @networks = Building.find(params[:building_id]).networks
+        @network = @networks.first
+        @building_id = params[:building_id]
+      elsif params.has_key?(:network_class_b) && !params[:network_class_b].empty?
+        @networks = Network.find_by_class_b(params[:network_class_b])
+        @network = @networks.first
+        @class_b = params[:network_class_b]
+      else
+        @networks = Network.all
+        @network = Network.find(params[:id])
+      end
+    rescue
       @networks = Network.all
-      @network = Network.find(params[:id])
+      @network = Network.first
     end
+
     
     respond_to do |format|
       format.js do
