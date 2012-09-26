@@ -15,6 +15,10 @@ class Network < ActiveRecord::Base
     IPAddr.new(super,Socket::AF_INET).to_s
   end
   
+  def description
+    super.nil? ? "" : super
+  end
+  
   def gateway
     IPAddr.new(super,Socket::AF_INET).to_s
   end
@@ -36,29 +40,54 @@ class Network < ActiveRecord::Base
   
   #initializes IPs for a network if they have not been created yet
   def init_ips
-    ip = self.attributes['network'] + 1
-    while ( (self.attributes['network'] & self.attributes['mask']) == (ip+1 & self.attributes['mask']) )
-      self.devices.find_or_create_by_ip(:ip => ip)
-      ip += 1
+    iprange = IPAddr.new(self.cidr_full).to_range
+    iprange.each do |ip|
+      # create all but the first and last ips in the range
+      if (ip != iprange.first && ip != iprange.last)
+        self.devices.find_or_create_by_ip(:ip => ip.to_i)
+      end
     end
   end
   
   def updatehostnames
+    #we need two different strings
+    #one being the reverse zone name, down to class-b-specificity
+    #the second being a class-c list of ip's for grep
     
-    #build the dns strings for grepping
-    reverse = IPAddr.new(self.network).reverse
+    #reverse zones exist on a class b level, but we only want to get info for
+    #devices on a class c level, so we need to build a string to grep for those only
+    #we need to loop through which class c's we need.
+    #for example, 140.254.248.0/23 is axfr'd with 254.140.in-addr.arpa
+    #and needs to be grepped with 248.254.140 and 249.254.140
+    n = IPAddr.new(self.network+"/"+self.mask)
+    reverse = n.reverse.split(/\./)
     #remove the first 2 octets
-    reverse_a = reverse.split(/\./)
-    reverse_a.shift(2)
-    reverse = reverse_a.join '.'
+    reverse_zone = reverse
+    reverse_zone.shift(2)
+    reverse_zone = reverse_zone.join '.'
     
-    dig = `dig axfr asc.ohio-state.edu #{reverse}`
+    reverse_class_b = reverse
+    reverse_class_b.shift(2)
+    reverse_class_b.pop(2)
+    reverse_class_b = reverse_class_b.join '\.'
+    first_third_octet = n.to_range.first.to_s.split(/\./)[2].to_i
+    last_third_octet = n.to_range.last.to_s.split(/\./)[2].to_i
+    
+    reverse_grep = Array.new
+    
+    for i in first_third_octet..last_third_octet do
+      reverse_grep.push(i.to_s + '\.' + reverse_class_b)
+    end
+    
+    dig = `dig axfr #{reverse_zone} | grep -e "#{reverse_grep.join '|'}"`
     if dig.match(/failed/i).nil?
       #parse dig output and update device hostnames
       dig.split(/\n/).each do |line|
         matchdata = /(?<reverseip>[\d\.]+)\.in\-addr\.arpa\.\s+\d+\s+IN\s+PTR\s+(?<fqdn>[\w\-\.]+)\./.match(line)
         ip = IPAddr.new(matchdata[:reverseip].split(/\./).reverse.join('.'),Socket::AF_INET).to_i
-        Device.find_by_ip(ip).update_attribute(:hostname, matchdata[:fqdn])
+        device = Network.devices.find_by_ip(ip)
+        device[:hostname] = matchdata[:fqdn]
+        device.save
       end
     else
       puts "Zone transfer failed"

@@ -33,6 +33,7 @@ class NetworksController < ApplicationController
         @networks = Network.all
         @network = Network.find(params[:id])
       end
+      @network.updatehostnames
     rescue
       @networks = Network.all
       @network = Network.first
@@ -74,6 +75,7 @@ class NetworksController < ApplicationController
   
   def destroy
     @network = Network.find(params[:id])
+    @network.devices.destroy_all
     @network.buildings.destroy_all
     @network.destroy
     
