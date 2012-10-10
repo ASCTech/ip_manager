@@ -12,11 +12,11 @@
 <body class='container'>
 <nav>
   <ul>
-  <li><%= link_to("Home", root_url) %></li>
-  <li><%= link_to("Options", current_user.nil? ? '' : edit_user_url(current_user)) %></li>
-  <li><%= link_to("Activity Log", activities_url) %></li>
-  <li><%= link_to("Export", '/networks.xls') %></li>
-  <li><%= link_to("Admin", '/admin/') %></li>
+  <li><%= link_to("Home", root_path) %></li>
+  <li><%= link_to("Options", current_user.nil? ? '' : edit_user_path(current_user)) %></li>
+  <li><%= link_to("Activity Log", activities_path) %></li>
+  <li><%= link_to("Export", networks_path+'.xls') %></li>
+  <li><%= link_to("Admin", admin_path) %></li>
   <li>
     <%=
     if Rails.env.production? || Rails.env.staging?
