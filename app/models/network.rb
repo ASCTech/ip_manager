@@ -62,11 +62,11 @@ class Network < ActiveRecord::Base
     n = IPAddr.new(self.network+"/"+self.mask)
     reverse = n.reverse.split(/\./)
     #remove the first 2 octets
-    reverse_zone = reverse
+    reverse_zone = reverse.clone
     reverse_zone.shift(2)
     reverse_zone = reverse_zone.join '.'
     
-    reverse_class_b = reverse
+    reverse_class_b = reverse.clone
     reverse_class_b.shift(2)
     reverse_class_b.pop(2)
     reverse_class_b = reverse_class_b.join '\.'
@@ -79,8 +79,10 @@ class Network < ActiveRecord::Base
       reverse_grep.push(i.to_s + '\.' + reverse_class_b)
     end
     
-    dig = `dig axfr #{reverse_zone} | grep -e "#{reverse_grep.join '|'}"`
-    if dig.match(/failed/i).nil?
+    print "dig axfr #{reverse_zone} | grep -e \"#{reverse_grep.join '\\|'}\""
+    #example dig: dig axfr 254.140.in-addr.arpa | grep -e "248\.254\.140|249\.254\.140"
+    dig = `dig axfr #{reverse_zone} | grep -e \"#{reverse_grep.join '\\|'}\"`
+    if !dig.empty?
       #parse dig output and update device hostnames
       dig.split(/\n/).each do |line|
         matchdata = /(?<reverseip>[\d\.]+)\.in\-addr\.arpa\.\s+\d+\s+IN\s+PTR\s+(?<fqdn>[\w\-\.]+)\./.match(line)
