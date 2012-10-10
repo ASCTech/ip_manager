@@ -82,14 +82,20 @@ class Network < ActiveRecord::Base
     print "dig axfr #{reverse_zone} | grep -e \"#{reverse_grep.join '\\|'}\""
     #example dig: dig axfr 254.140.in-addr.arpa | grep -e "248\.254\.140|249\.254\.140"
     dig = `dig axfr #{reverse_zone} | grep -e \"#{reverse_grep.join '\\|'}\"`
-    if !dig.empty?
-      #parse dig output and update device hostnames
+    unless dig.empty?
       dig.split(/\n/).each do |line|
+        
+        #parse out ip address and hostname
         matchdata = /(?<reverseip>[\d\.]+)\.in\-addr\.arpa\.\s+\d+\s+IN\s+PTR\s+(?<fqdn>[\w\-\.]+)\./.match(line)
+        
+        #convert parsed out ip address to integer form
         ip = IPAddr.new(matchdata[:reverseip].split(/\./).reverse.join('.'),Socket::AF_INET).to_i
-        device = Network.devices.find_by_ip(ip)
-        device[:hostname] = matchdata[:fqdn]
-        device.save
+        
+        device = self.devices.find_by_ip(ip)
+        unless device.nil?
+          device[:hostname] = matchdata[:fqdn]
+          device.save
+        end
       end
     else
       puts "Zone transfer failed"
